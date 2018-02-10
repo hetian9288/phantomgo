@@ -166,6 +166,22 @@ func (self *Phantom) Exec(js string, args ...string) (stdout io.ReadCloser, err 
 
 }
 
+// 自定义预编辑PhantomJS文件
+func (self *Phantom) ExecFile(jsPath string, args ...string) (stdout io.ReadCloser, err error) {
+	var exeCommand []string
+	exeCommand = append(append(exeCommand, jsPath), args...)
+	cmd := exec.Command(self.phantomjsPath, exeCommand...)
+	stdout, err = cmd.StdoutPipe()
+	if err != nil {
+		return nil, err
+	}
+	err = cmd.Start()
+	if err != nil {
+		return nil, err
+	}
+	return stdout, err
+}
+
 //SetUserAgent for example [chrome,firefox,IE..]
 func (self *Phantom) SetUserAgent(userAgent string) {
 	self.userAgent = userAgent
