@@ -53,7 +53,7 @@ type WebrowseParam struct {
 
 func NewPhantom() Phantomer {
 	phantom := &Phantom{
-		userAgent:     "Mozilla/5.0+(compatible;+Baiduspider/2.0;++http://www.baidu.com/search/spider.html)",
+		userAgent:     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
 		pageEncode:    "utf-8",
 		phantomjsPath: GOPATH + "/src/github.com/hetian9288/phantomgo/phantomjs/phantomjs",
 	}
