@@ -26,6 +26,7 @@ type Phantomer interface {
 	SetPhantomjsPath(string, string)
 	Download(Request) (*http.Response, error)
 	Exec(string, ...string) (io.ReadCloser, error)
+	ExecFile(jsPath string, args ...string) (stdout io.ReadCloser, err error)
 }
 
 type Phantom struct {
@@ -153,6 +154,23 @@ func (self *Phantom) Exec(js string, args ...string) (stdout io.ReadCloser, err 
 	file.Close()
 	var exeCommand []string
 	exeCommand = append(append(exeCommand, DIY_JS_FILE_NAME), args...)
+	cmd := exec.Command(self.phantomjsPath, exeCommand...)
+	stdout, err = cmd.StdoutPipe()
+	if err != nil {
+		return nil, err
+	}
+	err = cmd.Start()
+	if err != nil {
+		return nil, err
+	}
+	return stdout, err
+
+}
+
+//exec javascript
+func (self *Phantom) ExecFile(jsPath string, args ...string) (stdout io.ReadCloser, err error) {
+	var exeCommand []string
+	exeCommand = append(append(exeCommand, jsPath), args...)
 	cmd := exec.Command(self.phantomjsPath, exeCommand...)
 	stdout, err = cmd.StdoutPipe()
 	if err != nil {
