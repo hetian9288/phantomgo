@@ -9,6 +9,7 @@ import (
 	"os/exec"
 	"strings"
 	"time"
+	"path/filepath"
 )
 
 //javascript temp file name
@@ -169,8 +170,12 @@ func (self *Phantom) Exec(js string, args ...string) (stdout io.ReadCloser, err 
 
 //exec javascript
 func (self *Phantom) ExecFile(jsPath string, args ...string) (stdout io.ReadCloser, err error) {
+	absJsPath, err := filepath.Abs(jsPath)
+	if err != nil {
+		return nil, err
+	}
 	var exeCommand []string
-	exeCommand = append(append(exeCommand, jsPath), args...)
+	exeCommand = append(append(exeCommand, absJsPath), args...)
 	cmd := exec.Command(self.phantomjsPath, exeCommand...)
 	stdout, err = cmd.StdoutPipe()
 	if err != nil {
